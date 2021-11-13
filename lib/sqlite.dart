@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:nop_db/database/nop.dart';
 import 'package:sqlite3/sqlite3.dart';
 
@@ -5,23 +7,24 @@ class NopDatabaseImpl extends NopDatabase {
   NopDatabaseImpl._(String path) : super(path);
 
   late Database db;
-
   @override
-  late final execute = db.execute;
-
+  void execute(String sql, [List<Object?> paramters = const []]) =>
+      db.execute(sql, paramters);
   @override
-  late final rawQuery = _query;
-
+  FutureOr<List<Map<String, Object?>>> rawQuery(String sql,
+          [List<Object?> paramters = const []]) =>
+      _query(sql, paramters);
   @override
-  late final rawDelete = _inneridu;
-
+  FutureOr<int> rawUpdate(String sql, [List<Object?> paramters = const []]) =>
+      _inneridu(sql, paramters);
   @override
-  late final rawUpdate = _inneridu;
-
+  FutureOr<int> rawDelete(String sql, [List<Object?> paramters = const []]) =>
+      _inneridu(sql, paramters);
   @override
-  late final rawInsert = _inneridu;
+  FutureOr<int> rawInsert(String sql, [List<Object?> paramters = const []]) =>
+      _inneridu(sql, paramters);
 
-static NopDatabase openInMemory({
+  static NopDatabase openInMemory({
     required DatabaseOnCreate onCreate,
     int version = 1,
     DatabaseUpgrade? onUpgrade,
@@ -54,11 +57,9 @@ static NopDatabase openInMemory({
     return nop;
   }
 
-
-
   void _open({
-    required DatabaseOnCreate onCreate,
     int version = 1,
+    required DatabaseOnCreate onCreate,
     DatabaseUpgrade? onUpgrade,
     DatabaseUpgrade? onDowngrade,
   }) {
@@ -71,15 +72,11 @@ static NopDatabase openInMemory({
       onCreate(this, version);
       db.userVersion = version;
     } else if (_old < version) {
-      assert(onUpgrade != null, 'onUpgrade == null');
-
       if (onUpgrade != null) {
         db.userVersion = version;
         onUpgrade(this, _old, version);
       }
     } else if (_old > version) {
-      assert(onDowngrade != null, 'onDowngrade == null');
-
       if (onDowngrade != null) {
         db.userVersion = version;
         onDowngrade(this, _old, version);
@@ -99,8 +96,52 @@ static NopDatabase openInMemory({
   }
 
   @override
+  SqlitePrepare prepare(String sql,
+      {bool persistent = false, bool vtab = true, bool checkNoTail = false}) {
+    return SqlitePrepare(db.prepare(sql), db);
+  }
+
+  @override
   void dispose() {
     super.dispose();
     db.dispose();
+  }
+}
+
+class SqlitePrepare extends NopPrepare {
+  SqlitePrepare(this.sqlitePrepare, this.db);
+  final PreparedStatement sqlitePrepare;
+  final Database db;
+  @override
+  void dispose() {
+    sqlitePrepare.dispose();
+  }
+
+  @override
+  FutureOr<void> execute([List<Object?> paramters = const []]) {
+    sqlitePrepare.execute(paramters);
+  }
+
+  @override
+  FutureOr<int> rawDelete([List<Object?> paramters = const []]) =>
+      _inneridu(paramters);
+
+  @override
+  FutureOr<int> rawInsert([List<Object?> paramters = const []]) =>
+      _inneridu(paramters);
+
+  @override
+  FutureOr<int> rawUpdate([List<Object?> paramters = const []]) =>
+      _inneridu(paramters);
+
+  @override
+  FutureOr<List<Map<String, Object?>>> rawQuery(
+      [List<Object?> paramters = const []]) {
+    return sqlitePrepare.select(paramters).toList();
+  }
+
+  int _inneridu([List<Object?> paramters = const []]) {
+    execute(paramters);
+    return db.getUpdatedRows();
   }
 }
