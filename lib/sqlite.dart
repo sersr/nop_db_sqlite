@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:nop_db/database/nop.dart';
+import 'package:nop_db/nop_db.dart';
 import 'package:sqlite3/sqlite3.dart';
 
 class NopDatabaseImpl extends NopDatabase {
