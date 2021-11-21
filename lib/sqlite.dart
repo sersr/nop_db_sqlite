@@ -102,9 +102,9 @@ class NopDatabaseImpl extends NopDatabase {
   }
 
   @override
-  void dispose() {
-    super.dispose();
+  void disposeNop() {
     db.dispose();
+    super.disposeNop();
   }
 }
 
