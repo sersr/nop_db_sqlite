@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:nop_db/nop_db.dart';
 import 'package:sqlite3/sqlite3.dart';
-
+import 'package:utils/utils.dart';
 class NopDatabaseImpl extends NopDatabase {
   NopDatabaseImpl._(String path) : super(path);
 
@@ -17,16 +17,18 @@ class NopDatabaseImpl extends NopDatabase {
   }) {
     final nop = NopDatabaseImpl._(path);
 
-    nop._open(
+    return nop
+        ._open(
       version: version,
       onCreate: onCreate,
       onUpgrade: onUpgrade,
       onDowngrade: onDowngrade,
-    );
-    return nop;
+        )
+        .then((_) => nop);
+
   }
 
-  void _open({
+  FutureOr<void> _open({
     int version = 1,
     required DatabaseOnCreate onCreate,
     DatabaseUpgrade? onUpgrade,
@@ -38,17 +40,17 @@ class NopDatabaseImpl extends NopDatabase {
     final _old = db.userVersion;
 
     if (_old == 0) {
-      onCreate(this, version);
       db.userVersion = version;
+      return onCreate(this, version);
     } else if (_old < version) {
       if (onUpgrade != null) {
         db.userVersion = version;
-        onUpgrade(this, _old, version);
+        return onUpgrade(this, _old, version);
       }
     } else if (_old > version) {
       if (onDowngrade != null) {
         db.userVersion = version;
-        onDowngrade(this, _old, version);
+        return onDowngrade(this, _old, version);
       }
     }
   }
