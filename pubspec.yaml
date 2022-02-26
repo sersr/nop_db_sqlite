@@ -1,6 +1,6 @@
 name: nop_db_sqlite
 description: nop_db sqlite implemention
-version: 0.0.2
+version: 0.0.3
 homepage:
 publish_to: none
 
@@ -12,9 +12,11 @@ dependencies:
   flutter:
     sdk: flutter
   nop_db:
-    path: ../nop_db
+    git:
+      url: git@github.com:sersr/nop_db.git
   sqlite3_windows_dll:
-    path: ../sqlite3_windows_dll
+    git:
+      url: git@github.com:sersr/sqlite3_windows_dll.git
   sqlite3: ^1.1.2
   sqlite3_flutter_libs: ^0.5.0
   drift: ^1.1.0
