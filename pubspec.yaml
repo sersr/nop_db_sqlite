@@ -13,10 +13,10 @@ dependencies:
     sdk: flutter
   nop_db:
     git:
-      url: git@github.com:sersr/nop_db.git
+      url: https://github.com/sersr/nop_db.git
   sqlite3_windows_dll:
     git:
-      url: git@github.com:sersr/sqlite3_windows_dll.git
+      url: https://github.com/sersr/sqlite3_windows_dll.git
   sqlite3: ^1.1.2
   sqlite3_flutter_libs: ^0.5.0
   drift: ^1.1.0
