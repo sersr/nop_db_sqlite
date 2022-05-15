@@ -2,7 +2,7 @@ library nop_db_sqlite;
 
 import 'dart:async';
 
-import 'package:nop_db/nop_db.dart';
+import 'package:nop/nop.dart';
 import 'nop_db_sqlite.dart' if (dart.library.html) 'nop_db_sqlite_web.dart';
 
 FutureOr<NopDatabase> open(

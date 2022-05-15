@@ -11,9 +11,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  nop_db:
+  nop:
     git:
-      url: https://github.com/sersr/nop_db.git
+      url: https://github.com/sersr/nop.git
   sqlite3_windows_dll:
     git:
       url: https://github.com/sersr/sqlite3_windows_dll.git

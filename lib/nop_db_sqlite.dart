@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:nop_db/nop_db.dart';
+import 'package:nop/nop.dart';
 import 'package:sqlite3/sqlite3.dart';
-import 'package:utils/utils.dart';
+
 class NopDatabaseImpl extends NopDatabase {
   NopDatabaseImpl._(String path) : super(path);
 
@@ -19,13 +19,12 @@ class NopDatabaseImpl extends NopDatabase {
 
     return nop
         ._open(
-      version: version,
-      onCreate: onCreate,
-      onUpgrade: onUpgrade,
-      onDowngrade: onDowngrade,
+          version: version,
+          onCreate: onCreate,
+          onUpgrade: onUpgrade,
+          onDowngrade: onDowngrade,
         )
         .then((_) => nop);
-
   }
 
   FutureOr<void> _open({

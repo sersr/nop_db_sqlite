@@ -2,8 +2,7 @@ import 'dart:async';
 
 import 'package:drift/drift.dart';
 import 'package:drift/web.dart';
-import 'package:nop_db/nop_db.dart';
-import 'package:utils/utils.dart';
+import 'package:nop/nop.dart';
 
 class _QueryExe extends QueryExecutorUser {
   _QueryExe(this.schemaVersion, this.db, this.onCreate,
