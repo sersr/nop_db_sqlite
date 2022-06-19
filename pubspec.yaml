@@ -11,9 +11,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  nop:
-    git:
-      url: https://github.com/sersr/nop.git
+  nop: ^0.0.2+1
   nop_db:
     git:
       url: https://github.com/sersr/nop_db.git
