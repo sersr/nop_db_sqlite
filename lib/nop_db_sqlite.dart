@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:nop/nop.dart';
+import 'package:nop_db/nop_db.dart';
 import 'package:sqlite3/sqlite3.dart';
 
 class NopDatabaseImpl extends NopDatabase {
@@ -36,20 +37,20 @@ class NopDatabaseImpl extends NopDatabase {
     assert(version > 0);
 
     db = sqlite3.open(path);
-    final _old = db.userVersion;
+    final oldVersion = db.userVersion;
 
-    if (_old == 0) {
+    if (oldVersion == 0) {
       db.userVersion = version;
       return onCreate(this, version);
-    } else if (_old < version) {
+    } else if (oldVersion < version) {
       if (onUpgrade != null) {
         db.userVersion = version;
-        return onUpgrade(this, _old, version);
+        return onUpgrade(this, oldVersion, version);
       }
-    } else if (_old > version) {
+    } else if (oldVersion > version) {
       if (onDowngrade != null) {
         db.userVersion = version;
-        return onDowngrade(this, _old, version);
+        return onDowngrade(this, oldVersion, version);
       }
     }
   }
@@ -71,8 +72,8 @@ class NopDatabaseImpl extends NopDatabase {
   FutureOr<int> rawInsert(String sql, [List<Object?> parameters = const []]) =>
       _inneridu(sql, parameters);
 
-  int _inneridu(String sql, [List<Object?> paramters = const []]) {
-    execute(sql, paramters);
+  int _inneridu(String sql, [List<Object?> parameters = const []]) {
+    execute(sql, parameters);
 
     return db.getUpdatedRows();
   }
