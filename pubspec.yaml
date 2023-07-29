@@ -1,7 +1,6 @@
 name: nop_db_sqlite
 description: nop_db sqlite implemention
 version: 0.0.4
-homepage:
 publish_to: none
 
 environment:
@@ -11,7 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  nop: ">=0.0.3+1 <1.0.0"
+  nop: any
   nop_db:
     git:
       url: https://github.com/sersr/nop_db.git
