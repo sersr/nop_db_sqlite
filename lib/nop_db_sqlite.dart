@@ -5,7 +5,7 @@ import 'package:nop_db/nop_db.dart';
 import 'package:sqlite3/sqlite3.dart';
 
 class NopDatabaseImpl extends NopDatabase {
-  NopDatabaseImpl._(String path) : super(path);
+  NopDatabaseImpl._(super.path);
 
   late Database db;
 
@@ -59,9 +59,10 @@ class NopDatabaseImpl extends NopDatabase {
   void execute(String sql, [List<Object?> parameters = const []]) =>
       db.execute(sql, parameters);
   @override
-  FutureOr<List<Map<String, Object?>>> rawQuery(String sql,
-          [List<Object?> parameters = const []]) =>
-      db.select(sql, parameters).toList();
+  FutureOr<List<Map<String, Object?>>> rawQuery(
+    String sql, [
+    List<Object?> parameters = const [],
+  ]) => db.select(sql, parameters).toList();
   @override
   FutureOr<int> rawUpdate(String sql, [List<Object?> parameters = const []]) =>
       _inneridu(sql, parameters);
@@ -79,14 +80,18 @@ class NopDatabaseImpl extends NopDatabase {
   }
 
   @override
-  SqlitePrepare prepare(String sql,
-      {bool persistent = false, bool vtab = true, bool checkNoTail = false}) {
+  SqlitePrepare prepare(
+    String sql, {
+    bool persistent = false,
+    bool vtab = true,
+    bool checkNoTail = false,
+  }) {
     return SqlitePrepare(db.prepare(sql), db);
   }
 
   @override
   void disposeNop() {
-    db.dispose();
+    db.close();
     super.disposeNop();
   }
 }
@@ -97,7 +102,7 @@ class SqlitePrepare extends NopPrepare {
   final Database db;
   @override
   void dispose() {
-    sqlitePrepare.dispose();
+    sqlitePrepare.close();
   }
 
   @override
@@ -118,8 +123,9 @@ class SqlitePrepare extends NopPrepare {
       _inneridu(parameters);
 
   @override
-  FutureOr<List<Map<String, Object?>>> rawQuery(
-      [List<Object?> parameters = const []]) {
+  FutureOr<List<Map<String, Object?>>> rawQuery([
+    List<Object?> parameters = const [],
+  ]) {
     return sqlitePrepare.select(parameters).toList();
   }
 
