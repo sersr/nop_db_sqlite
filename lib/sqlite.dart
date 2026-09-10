@@ -1,5 +1,3 @@
-library nop_db_sqlite;
-
 import 'dart:async';
 
 import 'package:nop_db/nop_db.dart';
@@ -13,6 +11,10 @@ FutureOr<NopDatabase> open(
   DatabaseUpgrade? onUpgrade,
   DatabaseUpgrade? onDowngrade,
 }) {
-  return NopDatabaseImpl.open(path,
-      onCreate: onCreate, onUpgrade: onUpgrade, onDowngrade: onDowngrade);
+  return NopDatabaseImpl.open(
+    path,
+    onCreate: onCreate,
+    onUpgrade: onUpgrade,
+    onDowngrade: onDowngrade,
+  );
 }

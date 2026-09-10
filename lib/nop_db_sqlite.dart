@@ -76,7 +76,7 @@ class NopDatabaseImpl extends NopDatabase {
   int _inneridu(String sql, [List<Object?> parameters = const []]) {
     execute(sql, parameters);
 
-    return db.getUpdatedRows();
+    return db.updatedRows;
   }
 
   @override
@@ -131,6 +131,6 @@ class SqlitePrepare extends NopPrepare {
 
   int _inneridu([List<Object?> parameters = const []]) {
     execute(parameters);
-    return db.getUpdatedRows();
+    return db.updatedRows;
   }
 }
